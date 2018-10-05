@@ -1,13 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-{% load static %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/instaword.png' %}" alt="Instagram"></a>
+<body id="bod">
+
+<link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav">
+  <a class="navbar-brand" href="{% url 'home' %}"><img id='wordy' src="{% static 'images/instaword.png' %}" alt="Instagram"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
