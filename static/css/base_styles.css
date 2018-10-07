@@ -1,5 +1,5 @@
 #wordy{
-    max-width: 120px;
+    max-width: 110px;
 }
 
 #nav{
@@ -8,4 +8,8 @@
 
 #bod{
     background-color: #fafafa;
+}
+
+#logo1{
+    height: 30px;
 }

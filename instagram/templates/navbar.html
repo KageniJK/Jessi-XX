@@ -8,11 +8,14 @@
 <body id="bod">
 
 <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav">
-  <a class="navbar-brand" href="{% url 'home' %}"><img id='wordy' src="{% static 'images/instaword.png' %}" alt="Instagram"></a>
+    <nav class="navbar navbar-expand-lg navbar-light" id="nav">
+  <a class="navbar-brand" href="{% url 'home' %}"><img id="logo1" src="{%static 'images/logob&w.png'%}" alt="logo"> |
+      <img id='wordy'src="{% static 'images/instaword.png' %}" alt="Instagram"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+        <form class="form-inline my-2 my-lg-0" role="search" action="{% url 'search_results' %}">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search " name="search">
 
 </nav>
 </body>
