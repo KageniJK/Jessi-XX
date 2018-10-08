@@ -10,6 +10,13 @@ class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='profiles/')
     bio = models.CharField(max_length=250)
 
+    @classmethod
+    def get_user(cls, user):
+        return cls.objects.filter(user=user)
+
+    def save_profile(self):
+        self.save()
+
 
 class Image(models.Model):
     """

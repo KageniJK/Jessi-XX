@@ -1,7 +1,16 @@
 {% extends 'base.html'%}
+{% load bootstrap4 %}
 {%block content%}
 <div class="container" id="bod">
-  
+  {{user.username}}
+  {{profile.bio}}
+  <form  action="{%url 'home'%}" method="post">
+    {%csrf_token%}
+    {% bootstrap_form form layout='inline' %}
+    <input type="submit" value="Update">
+  </form>
+  <form action=""></form>
+  <img src="{{profile.profile_pic}}" alt="">
   <div class="row">
     {% for pic in pics%}
     <!--Displaying the pictures-->
