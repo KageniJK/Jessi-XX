@@ -6,7 +6,7 @@ class Profile(models.Model):
     """
     class that extends the user profile from django
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     profile_pic = models.ImageField(upload_to='profiles/')
     bio = models.CharField(max_length=250)
 
@@ -41,8 +41,17 @@ class Image(models.Model):
 
     @classmethod
     def delete_image(cls, id):
-        to_delete = cls.objects.filter_by(id=id)
+        to_delete = cls.objects.filter(id=id)
         to_delete.delete()
+
+    @classmethod
+    def get_by_user(cls, id):
+        pictures = cls.objects.filter(user=id)
+        return pictures
+
+    @classmethod
+    def get_all(cls):
+        return cls.objects.all()
 
 
 class Comments(models.Model):

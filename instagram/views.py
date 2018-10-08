@@ -6,19 +6,14 @@ from .forms import UpdateProfile
 
 @login_required(login_url='/accounts/login/')
 def index(request):
+    pics = Image.get_all()
+    return render(request, 'timeline.html', {'pics': pics})
+@login_required(login_url='/accounts/login/')
+def profile(request):
     user = request.user
-    profile = Profile.get_user(user.id)
-    if request.method == 'POST':
-        form = UpdateProfile(request.POST)
-        if form.is_valid():
-            bio = form.cleaned_data['bio']
-            profile = Profile(bio=bio, user=user)
-            profile.save()
-
-            HttpResponseRedirect('home')
-    else:
-        form = UpdateProfile()
-    return render(request, 'profile.html', {'user': user, 'profile': profile, 'form': form})
+    profiles = Profile.get_user(user.id)
+    pics = Image.get_by_user(profiles.id)
+    return render(request, 'profile.html', {'user': user, 'profile': profiles, 'pics': pics})
 
 
 @login_required(login_url='/accounts/login/')
