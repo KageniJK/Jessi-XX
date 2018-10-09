@@ -1,1 +1,1 @@
-web: gunicorn pictorial.wsgi
+web: gunicorn jessi.wsgi
