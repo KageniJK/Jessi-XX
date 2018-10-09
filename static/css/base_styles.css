@@ -13,3 +13,11 @@
 #logo1{
     height: 30px;
 }
+
+.icons{
+    font-size: 30px;
+}
+
+.icons a{
+    color: #000000;
+}

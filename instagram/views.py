@@ -8,11 +8,13 @@ from .forms import UpdateProfile
 def index(request):
     pics = Image.get_all()
     return render(request, 'timeline.html', {'pics': pics})
+
+
 @login_required(login_url='/accounts/login/')
 def profile(request):
     user = request.user
     profiles = Profile.get_user(user.id)
-    pics = Image.get_by_user(profiles.id)
+    pics = Image.get_by_user(user.id)
     return render(request, 'profile.html', {'user': user, 'profile': profiles, 'pics': pics})
 
 

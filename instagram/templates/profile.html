@@ -3,8 +3,9 @@
 {%block content%}
 <div class="container" id="bod">
   {{user.username}}
-  {{profile.id}}
+  <a href="/logout">Logout</a>
   <img src="{{profile.profile_pic}}" alt="">
+
   <div class="row">
     {% for pic in pics%}
     <!--Displaying the pictures-->
