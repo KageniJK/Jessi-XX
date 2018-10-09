@@ -21,3 +21,18 @@
 .icons a{
     color: #000000;
 }
+.modal img {
+    width:auto;
+    max-width: 80%;
+    max-height: 70vh;
+    width: auto\9; /* ie8 */
+  }
+.modal-body{
+   text-align: center;
+   height: auto;
+}
+@media (min-width: 768px){
+.modal-dialog {
+   width: auto;
+   max-width: 80%;
+}

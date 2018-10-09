@@ -15,7 +15,17 @@ def profile(request):
     user = request.user
     profiles = Profile.get_user(user.id)
     pics = Image.get_by_user(user.id)
-    return render(request, 'profile.html', {'user': user, 'profile': profiles, 'pics': pics})
+    if request.method == 'POST':
+        profile_form = UpdateProfile(request.POST, request.FILES)
+        if profile_form.is_valid():
+            bio = request.GET.get('bio')
+            pic = request.GET.get('profile_pic')
+            profile = Profile(bio=bio, profile_pic=pic, user=request.user)
+            profile.save()
+            return HttpResponseRedirect('/profile')
+    else:
+        profile_form = UpdateProfile()
+    return render(request, 'profile.html', {'user': user, 'profile': profiles, 'pics': pics, 'profile_form': profile_form})
 
 
 @login_required(login_url='/accounts/login/')

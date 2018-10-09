@@ -3,37 +3,22 @@
 {%block content%}
 <div class="container" id="bod">
   {{user.username}}
+  {{profile.bio}}
   <a href="/logout">Logout</a>
   <img src="{{profile.profile_pic}}" alt="">
-
+  <form action="{% url 'profile'%}" method="POST">
+    {%csrf_token%}
+    {% bootstrap_form profile_form%}
+    <input type="submit" class="btn btn-success btn-lg" value="Update">
+  </form>
   <div class="row">
     {% for pic in pics%}
     <!--Displaying the pictures-->
     <div class="card col-xs-4 col-sm-4 col-md-4 col-lg-4">
-      <img class="card-img-top" src="{{pic.image.url}}" alt="Image" data-toggle="modal" data-target="#exampleModal{{pic.id}}">
+      <img class="card-img-top" src="{{pic.image.url}}" alt="Image">
 
     </div>
-    <div class="modal fade" id="exampleModal{{pic.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{pic.name}}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-          </div>
-          <div class="modal-body">
-              <img src="{{pic.image.url}}" alt="{{pic.name}}">
-          </div>
-          <div class="modal-footer">
-                <button  type="button" value="https://jessi-xx.herokuapp.com{{pic.image.url}}"  onclick="copyLink(this.value)"
-                         class="btn btn-outline-secondary my-2 my-sm-0 link-btn"><i class="far fa-copy"></i> Copy link</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-          </div>
-        </div>
-      </div>
-    </div>
+    
     {% empty %}
     <div class="row">
       <h2 class="text-center">There are No Pictures</h2>
