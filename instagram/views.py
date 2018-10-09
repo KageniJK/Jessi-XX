@@ -24,6 +24,9 @@ def profile(request):
         profile_form = UpdateProfile(request.POST, request.FILES)
         upload_form = PostImageForm(request.POST, request.FILES)
         if profile_form.is_valid():
+            if Profile.get_user(user.id):
+                deleter = Profile.get_user(user.id)
+                deleter.delete()
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save_profile()
@@ -41,12 +44,13 @@ def profile(request):
 
 @login_required(login_url='/accounts/login/')
 def search_results(request):
-    if 'pic' in request.GET and request.GET['pic']:
-        search_term = request.GET.get('pic')
-        search_pics = Image.search_images(search_term)
+    if 'search' in request.GET and request.GET['search']:
+        search_term = request.GET.get('search')
+        search_pics = Image.search_image(search_term)
+        search_prof = Profile.search_profiles(search_term)
         message = f'{search_term}'
 
-        return render(request, 'search.html', {'message': message})
+        return render(request, 'search.html', {'message': message, 'pics': search_pics, 'profiles': search_prof})
 
     else:
         message = "You haven't searched for any term"

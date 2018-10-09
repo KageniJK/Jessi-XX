@@ -25,6 +25,10 @@ class Profile(models.Model):
     def save_profile(self):
         self.save()
 
+    @classmethod
+    def search_profiles(cls, search_term):
+        return cls.objects.filter(user__username__icontains=search_term)
+
 
 class Image(models.Model):
     """
@@ -60,6 +64,10 @@ class Image(models.Model):
     @classmethod
     def get_all(cls):
         return cls.objects.all().order_by('-id')
+
+    @classmethod
+    def search_image(cls, search_term):
+        return cls.objects.filter(caption__icontains=search_term)
 
 
 class Comments(models.Model):
