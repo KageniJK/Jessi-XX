@@ -6,13 +6,21 @@ class Profile(models.Model):
     """
     class that extends the user profile from django
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     profile_pic = models.ImageField(upload_to='profiles/')
     bio = models.CharField(max_length=250)
 
     @classmethod
     def get_user(cls, user):
-        return cls.objects.filter(user=user)
+        ask = cls.objects.filter(user=user)
+        return ask
+
+    @classmethod
+    def update_profile(cls, id, bio, pic):
+        upd8 = cls.objects.filter(user=id)
+        upd8.bio= bio
+        upd8.profile_pic = pic
+        upd8.save()
 
     def save_profile(self):
         self.save()
@@ -27,7 +35,7 @@ class Image(models.Model):
     caption = models.CharField(max_length=100)
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.name
@@ -51,14 +59,14 @@ class Image(models.Model):
 
     @classmethod
     def get_all(cls):
-        return cls.objects.all()
+        return cls.objects.all().order_by('-id')
 
 
 class Comments(models.Model):
     """
     class that defines the post comments
     """
-    user = models.ForeignKey(Profile)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     image = models.ForeignKey(Image)
     comment = models.CharField(max_length=250)
     pub_time = models.DateTimeField(auto_now_add=True)

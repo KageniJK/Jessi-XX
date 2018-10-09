@@ -1,7 +1,8 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Image
-from .forms import UpdateProfile
+from .forms import UpdateProfile, PostImageForm
+from django.http import HttpResponseRedirect
 
 
 @login_required(login_url='/accounts/login/')
@@ -14,18 +15,28 @@ def index(request):
 def profile(request):
     user = request.user
     profiles = Profile.get_user(user.id)
+    if profiles:
+        profile = profiles[len(profiles)-1]
+    else:
+        profile = profiles
     pics = Image.get_by_user(user.id)
     if request.method == 'POST':
         profile_form = UpdateProfile(request.POST, request.FILES)
+        upload_form = PostImageForm(request.POST, request.FILES)
         if profile_form.is_valid():
-            bio = request.GET.get('bio')
-            pic = request.GET.get('profile_pic')
-            profile = Profile(bio=bio, profile_pic=pic, user=request.user)
-            profile.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save_profile()
             return HttpResponseRedirect('/profile')
+        if upload_form.is_valid():
+            image = upload_form.save(commit=False)
+            image.user = user
+            image.save_image()
     else:
         profile_form = UpdateProfile()
-    return render(request, 'profile.html', {'user': user, 'profile': profiles, 'pics': pics, 'profile_form': profile_form})
+        upload_form =PostImageForm()
+    return render(request, 'profile.html', {'user': user, 'profile': profile, 'pics': pics, 'profile_form': profile_form,
+                                            'upload_form': upload_form})
 
 
 @login_required(login_url='/accounts/login/')

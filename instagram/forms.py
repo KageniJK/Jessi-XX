@@ -1,9 +1,20 @@
 from django import forms
+from .models import Profile, Image
 
 
-class UpdateProfile(forms.Form):
+class UpdateProfile(forms.ModelForm):
     """
     Enables the user to update their bio and profile picture
     """
-    bio = forms.CharField(label='bio', max_length=250)
-    profile_pic = forms.FileField()
+    class Meta:
+        model = Profile
+        exclude = ['user']
+
+
+class PostImageForm(forms.ModelForm):
+    """
+    Enables the user to upload images
+    """
+    class Meta:
+        model = Image
+        exclude = ['user', 'post_date', 'likes']
