@@ -69,8 +69,9 @@ class Image(models.Model):
         return cls.objects.filter(caption__icontains=search_term)
 
     @classmethod
-    def get_by_id(cls, id):
-        return cls.objects.filter(id=id)
+    def get_img_by_id(cls, ide):
+        picture = cls.objects.get(id=ide)
+        return picture
 
 
 class Comments(models.Model):

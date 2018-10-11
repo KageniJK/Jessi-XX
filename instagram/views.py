@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Image
+from .models import Profile, Image, Comments
 from .forms import UpdateProfile, PostImageForm, CommentForm
 from django.http import HttpResponseRedirect
 
@@ -41,7 +41,7 @@ def profile(request):
         profile_form = UpdateProfile()
         upload_form = PostImageForm()
         comment_form = CommentForm
-    return render(request, 'profile.html', {'user': user, 'profile': profile, 'pics': pics, 'profile_form': profile_form,
+    return render(request, 'registration/profile.html', {'user': user, 'profile': profile, 'pics': pics, 'profile_form': profile_form,
                                             'upload_form': upload_form, 'coment_form': comment_form})
 
 
@@ -59,17 +59,21 @@ def search_results(request):
         message = "You haven't searched for any term"
         return render(request, 'search.html', {'message': message})
 
-def single_pic(request, id):
+
+@login_required(login_url='/accounts/login/')
+def single_pic(request, img):
     user = request.user
-    image = Image.get_by_id(id)
+    picture = Image.get_img_by_id(img)
+    comments = Comments.get_by_image(img)
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.user = user
-            comment.image = image
+            comment.image = picture
             comment.save()
+            return redirect('picture', picture.id)
     else:
         comment_form = CommentForm()
 
-    return render(request, 'picture.html', {'comment_form': comment_form, 'image': image, 'user': user})
+    return render(request, 'picture.html', {'comment_form': comment_form, 'pic': picture, 'user': user, 'comments': comments})
