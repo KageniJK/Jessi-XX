@@ -1,3 +1,6 @@
 from django.test import TestCase
+from .models import Image, Profile, Comments
 
-# Create your tests here.
+
+cl
+

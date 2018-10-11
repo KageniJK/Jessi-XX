@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Image
+from .models import Profile, Image, Comments
 
 
 class UpdateProfile(forms.ModelForm):
@@ -18,3 +18,12 @@ class PostImageForm(forms.ModelForm):
     class Meta:
         model = Image
         exclude = ['user', 'post_date', 'likes']
+
+
+class CommentForm(forms.ModelForm):
+    """
+    Enables users to comment on images
+    """
+    class Meta:
+        model = Comments
+        exclude = ['user', 'pub_time', 'image']

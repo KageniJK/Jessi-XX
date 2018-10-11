@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Image
-from .forms import UpdateProfile, PostImageForm
+from .forms import UpdateProfile, PostImageForm, CommentForm
 from django.http import HttpResponseRedirect
 
 
@@ -15,14 +15,16 @@ def index(request):
 def profile(request):
     user = request.user
     profiles = Profile.get_user(user.id)
+    pics = Image.get_by_user(user.id)
     if profiles:
         profile = profiles[len(profiles)-1]
     else:
         profile = profiles
-    pics = Image.get_by_user(user.id)
+
     if request.method == 'POST':
         profile_form = UpdateProfile(request.POST, request.FILES)
         upload_form = PostImageForm(request.POST, request.FILES)
+        comment_form = CommentForm(request.POST)
         if profile_form.is_valid():
             if Profile.get_user(user.id):
                 deleter = Profile.get_user(user.id)
@@ -37,9 +39,10 @@ def profile(request):
             image.save_image()
     else:
         profile_form = UpdateProfile()
-        upload_form =PostImageForm()
+        upload_form = PostImageForm()
+        comment_form = CommentForm
     return render(request, 'profile.html', {'user': user, 'profile': profile, 'pics': pics, 'profile_form': profile_form,
-                                            'upload_form': upload_form})
+                                            'upload_form': upload_form, 'coment_form': comment_form})
 
 
 @login_required(login_url='/accounts/login/')
@@ -55,3 +58,18 @@ def search_results(request):
     else:
         message = "You haven't searched for any term"
         return render(request, 'search.html', {'message': message})
+
+def single_pic(request, id):
+    user = request.user
+    image = Image.get_by_id(id)
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = user
+            comment.image = image
+            comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'picture.html', {'comment_form': comment_form, 'image': image, 'user': user})

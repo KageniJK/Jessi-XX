@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-import random
 
 
 class Profile(models.Model):
@@ -59,8 +58,7 @@ class Image(models.Model):
 
     @classmethod
     def get_by_user(cls, id):
-        pictures = cls.objects.filter(user=id)
-        return pictures
+        return cls.objects.filter(user=id)
 
     @classmethod
     def get_all(cls):
@@ -70,13 +68,26 @@ class Image(models.Model):
     def search_image(cls, search_term):
         return cls.objects.filter(caption__icontains=search_term)
 
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.objects.filter(id=id)
+
 
 class Comments(models.Model):
     """
     class that defines the post comments
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    image = models.ForeignKey(Image)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, default=1)
     comment = models.CharField(max_length=250)
     pub_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
+    def save_comment(self):
+        self.save()
+
+    @classmethod
+    def get_by_image(cls, id):
+        return cls.objects.filter(image=id)
